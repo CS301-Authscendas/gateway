@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { AuthService } from "./auth.service";
 
