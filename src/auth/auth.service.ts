@@ -44,6 +44,42 @@ export class AuthService {
         }
     }
 
+    async generateJwtToken(email: string) {
+        try {
+            const resp = await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.GENERATE_JWT}/${email}`);
+            return resp?.data;
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
+
+    async validateJwtToken(token: string) {
+        const data = {
+            token: token,
+        };
+
+        try {
+            const resp = await this.httpService.axiosRef.post(`${AUTH_ENDPOINTS.VALIDATE_JWT}`, data);
+            return resp?.data;
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
+
+    async validateUserCredentials(email: string, password: string) {
+        const data = {
+            email: email,
+            password: password,
+        };
+
+        try {
+            const resp = await this.httpService.axiosRef.post(`${AUTH_ENDPOINTS.VALIDATE_JWT}`, data);
+            return resp?.data;
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
+
     async ssoLogin() {
         try {
             const resp = await this.httpService.axiosRef.get(AUTH_ENDPOINTS.SSO_LOGIN);

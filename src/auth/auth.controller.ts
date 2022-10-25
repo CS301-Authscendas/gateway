@@ -1,4 +1,6 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Response, UseGuards } from "@nestjs/common";
+import { Response as Res } from "express";
+import { JwtAuthGuard } from "src/guard/jwt.guard";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { AuthService } from "./auth.service";
 
@@ -25,6 +27,17 @@ export class AuthController {
     @Post(AUTH_ENDPOINTS.VALIDATE_2FA)
     async validate2FA(@Body() requestBody: object) {
         return await this.authService.validate2FAToken(requestBody);
+    }
+
+    @Post(`${AUTH_ENDPOINTS.GENERATE_JWT}/:email`)
+    async generateJWTToken(@Param("email") email: string) {
+        return await this.authService.generateJwtToken(email);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(AUTH_ENDPOINTS.VALIDATE_JWT)
+    validateJwtToken(@Response() res: Res) {
+        return res.send({ message: "JWT token is valid!" });
     }
 
     @Get(AUTH_ENDPOINTS.SSO_LOGIN)
