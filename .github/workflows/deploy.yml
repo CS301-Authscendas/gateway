@@ -1,0 +1,104 @@
+name: Execute Test before Deployment to ECR
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: Execute Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.17.0
+          cache: "npm"
+
+      - name: Build and Test
+        run: |
+          npm ci
+          npm run build
+          npm run test
+
+  deploy:
+    name: Deploy to ECR
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'main'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ format('{0}-ecr-gateway', secrets.APP_NAME) }}
+          IMAGE_TAG: ${{ format('{0}-ecr-gateway-latest', secrets.APP_NAME) }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Download Task Definition for Availability Zone 1a
+        env:
+          TASK_DEFINITION: ${{ format('{0}-task-gateway-1a', secrets.APP_NAME) }}
+        run: |
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+
+      - name: Fill in new Image ID for Amazon ECS Task Definition in Availability Zone 1a
+        id: task-definition-1a
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ format('{0}-gateway-1a', secrets.APP_NAME) }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS Task Definition for Availability Zone 1a
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-definition-1a.outputs.task-definition }}
+          service: ${{ format('{0}-ecs-service-gateway-1a', secrets.APP_NAME) }}
+          cluster: ${{ format('{0}-ecs-gateway-1a', secrets.APP_NAME) }}
+          wait-for-service-stability: true
+
+      - name: Download Task Definition for Availability Zone 1b
+        env:
+          TASK_DEFINITION: ${{ format('{0}-task-gateway-1b', secrets.APP_NAME) }}
+        run: |
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+
+      - name: Fill in new Image ID for Amazon ECS Task Definition in Availability Zone 1b
+        id: task-definition-1b
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ format('{0}-gateway-1b', secrets.APP_NAME) }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS Task Definition for Availability Zone 1b
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-definition-1b.outputs.task-definition }}
+          service: ${{ format('{0}-ecs-service-gateway-1b', secrets.APP_NAME) }}
+          cluster: ${{ format('{0}-ecs-gateway-1b', secrets.APP_NAME) }}
+          wait-for-service-stability: true
