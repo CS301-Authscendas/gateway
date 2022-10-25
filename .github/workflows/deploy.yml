@@ -26,7 +26,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm run test --passWithNoTests
+          npm run test
 
   deploy:
     name: Deploy to ECR
