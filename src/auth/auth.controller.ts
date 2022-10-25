@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Post } from "@nestjs/common";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { AuthService } from "./auth.service";
 
@@ -8,7 +8,8 @@ export class AuthController {
 
     @Post(AUTH_ENDPOINTS.SIGNUP)
     async signUp(@Body() requestBody: object) {
-        return await this.authService.signup(requestBody);
+        const resp = await this.authService.signup(requestBody);
+        return resp;
     }
 
     @Post(AUTH_ENDPOINTS.LOGIN)
@@ -36,7 +37,7 @@ export class AuthController {
         return await this.authService.ssoCallback(code);
     }
 
-    @Get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}\:id`)
+    @Get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/:id`)
     async userSignUpStatus(@Param("id") id: string) {
         return await this.authService.userSignUpStatus(id);
     }

@@ -10,7 +10,8 @@ export class AuthService {
 
     async signup(requestBody: object) {
         try {
-            return await this.httpService.axiosRef.post(AUTH_ENDPOINTS.SIGNUP, requestBody);
+            const resp = await this.httpService.axiosRef.post(AUTH_ENDPOINTS.SIGNUP, requestBody);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -18,7 +19,8 @@ export class AuthService {
 
     async login(requestBody: object) {
         try {
-            return await this.httpService.axiosRef.post(AUTH_ENDPOINTS.LOGIN, requestBody);
+            const resp = await this.httpService.axiosRef.post(AUTH_ENDPOINTS.LOGIN, requestBody);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -26,7 +28,8 @@ export class AuthService {
 
     async generate2FAToken(email: string) {
         try {
-            return await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.GENERATE_2FA}/${email}`);
+            const resp = await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.GENERATE_2FA}/${email}`);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -34,7 +37,8 @@ export class AuthService {
 
     async validate2FAToken(requestBody: object) {
         try {
-            return await this.httpService.axiosRef.post(AUTH_ENDPOINTS.VALIDATE_2FA, requestBody);
+            const resp = await this.httpService.axiosRef.post(AUTH_ENDPOINTS.VALIDATE_2FA, requestBody);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -42,7 +46,8 @@ export class AuthService {
 
     async ssoLogin() {
         try {
-            return await this.httpService.axiosRef.get(AUTH_ENDPOINTS.SSO_LOGIN);
+            const resp = await this.httpService.axiosRef.get(AUTH_ENDPOINTS.SSO_LOGIN);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -50,7 +55,8 @@ export class AuthService {
 
     async ssoCallback(code: string) {
         try {
-            return await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.SSO_CALLBACK}?code=${code}`);
+            const resp = await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.SSO_CALLBACK}?code=${code}`);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
@@ -58,7 +64,8 @@ export class AuthService {
 
     async userSignUpStatus(id: string) {
         try {
-            return await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/${id}`);
+            const resp = await this.httpService.axiosRef.get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/${id}`);
+            return resp?.data;
         } catch (error) {
             errorHandler(error);
         }
