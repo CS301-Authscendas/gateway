@@ -78,7 +78,7 @@ jobs:
         with:
           task-definition: ${{ steps.task-definition-1a.outputs.task-definition }}
           service: ${{ format('{0}-ecs-service-gateway-1a', secrets.APP_NAME) }}
-          cluster: ${{ format('{0}-ecs-gateway-1a', secrets.APP_NAME) }}
+          cluster: ${{ format('{0}-ecs-authentication-1a', secrets.APP_NAME) }}
           wait-for-service-stability: true
 
       - name: Download Task Definition for Availability Zone 1b
