@@ -23,7 +23,7 @@ export class UserController {
     @Post("fetch-organizations")
     async fetchOrganizations(@Body() requestBody: object) {
         // TODO: Implement
-        return await this.userService.fetchOrganizationsByList(requestBody)
+        return await this.userService.fetchOrganizationsByList(requestBody);
     }
 
     // TODO: ensure user has owner or admin privileges
