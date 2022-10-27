@@ -23,16 +23,10 @@ export class UserController {
     @Post("fetch-organizations")
     async fetchOrganizations(@Body() requestBody: object) {
         // TODO: Implement
+        return await this.userService.fetchOrganizationsByList(requestBody)
     }
 
-    // TODO: ensure user has admin:view privileges
-    // Endpoint to render list of users on the home screen
-    // @Get("fetch-users-list")
-    // async fetchUsersList() {
-
-    // }
-
-    // TODO: ensure user has owner privileges
+    // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch-users-list/:organizationId")
     async fetchUsersListByOrganization(@Param("organizationId") organizationId: string) {

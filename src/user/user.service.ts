@@ -42,4 +42,16 @@ export class UserService {
             errorHandler(error);
         }
     }
+
+    async fetchOrganizationsByList(requestBody: object) {
+        try {
+            const resp = await this.httpService.axiosRef.post(
+                `${this.BASE_URL}/${ORGANIZATION_PREFIX}/${USER_ENDPOINTS.FETCH_ORGANIZATIONS}`,
+                requestBody,
+            );
+            return resp?.data;
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
 }
