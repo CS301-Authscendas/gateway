@@ -10,8 +10,8 @@ const ORGANIZATION_PREFIX = "organization";
 @Injectable()
 export class UserService {
     private BASE_URL;
-    constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {
-        this.BASE_URL = configService.get("BASE_USER_URL");
+    constructor(private readonly httpService: HttpService, configService: ConfigService) {
+        this.BASE_URL = configService.get("BASE_USER_URL") + "/user";
     }
 
     async getDetailsFromEmail(email: string) {
