@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Request, Response, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Request, Response, UseGuards } from "@nestjs/common";
 import { Request as Req, Response as Res } from "express";
 import { JwtAuthGuard } from "src/guard/jwt.guard";
 import { UserService } from "./user.service";
@@ -27,22 +27,22 @@ export class UserController {
 
     // TODO: ensure user has admin:view privileges
     // Endpoint to render list of users on the home screen
-    @Get("fetch-users-list/:organizationId")
-    async fetchUsersList(@Param("organizationId") organizationId: string) {
-        return await this.userService.getUsersFromOrg(organizationId);
-    }
+    // @Get("fetch-users-list")
+    // async fetchUsersList() {
+
+    // }
 
     // TODO: ensure user has owner privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch-users-list/:organizationId")
     async fetchUsersListByOrganization(@Param("organizationId") organizationId: string) {
-        // TODO: Implement
+        return await this.userService.fetchUsersByOrg(organizationId);
     }
 
     // TODO: ensure user has at least admin:edit privileges
     // Endpoint to edit user information
-    @Post("edit-user-details")
+    @Put("edit-user-details")
     async editUserDetails(@Body() requestBody: object) {
-        // TODO: Implement
+        return await this.userService.updateUserDetails(requestBody);
     }
 }
