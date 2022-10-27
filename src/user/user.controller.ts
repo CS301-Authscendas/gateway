@@ -20,6 +20,7 @@ export class UserController {
     }
 
     // Takes in an array of organization ID and return the corresponding names
+    // request: {ids: ["orgid1, orgid2 ..."]}
     @Post("fetch-organizations")
     async fetchOrganizations(@Body() requestBody: object) {
         return await this.userService.fetchOrganizationsByList(requestBody);
