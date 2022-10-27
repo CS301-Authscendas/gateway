@@ -22,7 +22,6 @@ export class UserController {
     // Takes in an array of organization ID and return the corresponding names
     @Post("fetch-organizations")
     async fetchOrganizations(@Body() requestBody: object) {
-        // TODO: Implement
         return await this.userService.fetchOrganizationsByList(requestBody);
     }
 
