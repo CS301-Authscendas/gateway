@@ -43,6 +43,15 @@ export class UserService {
         }
     }
 
+    async deleteUser(email: string) {
+        try {
+            const resp = await this.httpService.axiosRef.delete(`${this.BASE_URL}/${USER_PREFIX}/${email}`);
+            return resp?.data;
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
+
     async fetchOrganizationsByList(requestBody: object) {
         try {
             const resp = await this.httpService.axiosRef.post(

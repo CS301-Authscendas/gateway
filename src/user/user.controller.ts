@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Request, Response, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Request, Response, UseGuards } from "@nestjs/common";
 import { Request as Req, Response as Res } from "express";
 import { JwtAuthGuard } from "src/guard/jwt.guard";
 import { UserService } from "./user.service";
@@ -38,5 +38,11 @@ export class UserController {
     @Put("edit-user-details")
     async editUserDetails(@Body() requestBody: object) {
         return await this.userService.updateUserDetails(requestBody);
+    }
+
+    @Delete(":email")
+    async deleteUser(@Param("email") email: string): Promise<void> {
+        Logger.log("HIII");
+        await this.userService.deleteUser(email);
     }
 }
