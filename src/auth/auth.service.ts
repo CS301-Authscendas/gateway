@@ -6,7 +6,7 @@ import { errorHandler } from "./auth.util";
 
 @Injectable()
 export class AuthService {
-    private BASE_AUTH_URL;
+    private BASE_AUTH_URL: string;
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_AUTH_URL = configService.get("BASE_AUTH_URL") + "/auth";
     }
@@ -131,5 +131,20 @@ export class AuthService {
         } catch (error) {
             errorHandler(error);
         }
+    }
+
+    async checkUserLoginMethod(orgId: string, loginMethod: string): Promise<boolean> {
+        const data = {
+            organizationId: orgId,
+            loginMethod: loginMethod,
+        };
+
+        try {
+            await this.httpService.axiosRef.post(`${this.BASE_AUTH_URL}/validate-login-method`, data);
+            return true;
+        } catch (error) {
+            errorHandler(error);
+        }
+        return false;
     }
 }
