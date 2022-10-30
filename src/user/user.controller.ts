@@ -42,7 +42,6 @@ export class UserController {
 
     @Delete(":email")
     async deleteUser(@Param("email") email: string): Promise<void> {
-        Logger.log("HIII");
         await this.userService.deleteUser(email);
     }
 }
