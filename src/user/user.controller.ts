@@ -1,12 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Response, UseGuards } from "@nestjs/common";
 import { Response as Res } from "express";
-import { JwtAuthGuard } from "src/guard/jwt.guard";
-import { Organization } from "./decorators/organization.decorator";
-import { User } from "./decorators/user.decorator";
+import { JwtAuthGuard } from "../guard/jwt.guard";
+import { RequirePermissions } from "../utils/decorators/permissions.decorator";
+import { Organization } from "../utils/decorators/organization.decorator";
+import { User } from "../utils/decorators/user.decorator";
 import { UserService } from "./user.service";
+import { PermissionGuard } from "../guard/permissions.guard";
 
 @Controller("user")
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
@@ -31,6 +33,7 @@ export class UserController {
     // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch/users-list")
+    @RequirePermissions("admin-view")
     async fetchUsersListByOrganization(@Organization() organizationId: string) {
         return await this.userService.fetchUsersByOrg(organizationId);
     }
@@ -38,11 +41,13 @@ export class UserController {
     // TODO: ensure user has at least admin:edit privileges
     // Endpoint to edit user information
     @Put("edit-user-details")
+    @RequirePermissions("admin-edit")
     async editUserDetails(@Body() requestBody: object) {
         return await this.userService.updateUserDetails(requestBody);
     }
 
     @Delete(":email")
+    @RequirePermissions("admin-delete")
     async deleteUser(@Param("email") email: string): Promise<void> {
         await this.userService.deleteUser(email);
     }

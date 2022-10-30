@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Response, UseGuards } from "@nestjs/common";
 import { Response as Res } from "express";
-import { JwtAuthGuard } from "src/guard/jwt.guard";
+import { JwtAuthGuard } from "../guard/jwt.guard";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { AuthService } from "./auth.service";
 
