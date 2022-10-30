@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Request, Response, UseGuards } from "@nestjs/common";
 import { Request as Req, Response as Res } from "express";
 import { JwtAuthGuard } from "src/guard/jwt.guard";
+import { Organization } from "./decorators/organization.decorator";
+import { User } from "./decorators/user.decorator";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -9,8 +11,8 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    getOwnDetails(@Request() req: Req, @Response() res: Res) {
-        return res.json({ data: req.user });
+    getOwnDetails(@User() user: object, @Response() res: Res) {
+        return res.json({ data: user });
     }
 
     // TODO: ensure user has at least user privileges
@@ -29,7 +31,7 @@ export class UserController {
     // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch-users-list/:organizationId")
-    async fetchUsersListByOrganization(@Param("organizationId") organizationId: string) {
+    async fetchUsersListByOrganization(@Organization() organizationId: string) {
         return await this.userService.fetchUsersByOrg(organizationId);
     }
 
