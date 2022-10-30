@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post, Put, Response, UseGuards } from "@nestjs/common";
 import { Response as Res } from "express";
 import { JwtAuthGuard } from "src/guard/jwt.guard";
-import { User } from "./user.decorator";
+import { Organization } from "./decorators/organization.decorator";
+import { User } from "./decorators/user.decorator";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -30,7 +31,7 @@ export class UserController {
     // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch-users-list/:organizationId")
-    async fetchUsersListByOrganization(@Param("organizationId") organizationId: string) {
+    async fetchUsersListByOrganization(@Organization() organizationId: string) {
         return await this.userService.fetchUsersByOrg(organizationId);
     }
 
