@@ -7,11 +7,12 @@ import { errorHandler } from "./auth.util";
 @Injectable()
 export class AuthService {
     private BASE_AUTH_URL: string;
+    private readonly logger = new Logger(AuthService.name);
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_AUTH_URL = configService.get("BASE_AUTH_URL") + "/auth";
 
         // TODO: Remove before production deployment.
-        Logger.log(this.BASE_AUTH_URL);
+        this.logger.log(this.BASE_AUTH_URL);
     }
 
     async signup(requestBody: object) {
