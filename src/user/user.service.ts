@@ -11,7 +11,7 @@ const ORGANIZATION_PREFIX = "organization";
 export class UserService {
     private BASE_URL;
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
-        this.BASE_URL = configService.get("BASE_USER_URL") + "/user";
+        this.BASE_URL = configService.get("BASE_USER_URL");
     }
 
     async getDetailsFromEmail(email: string) {
