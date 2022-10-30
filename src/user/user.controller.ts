@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Put, Request, Response, UseGuards } from "@nestjs/common";
-import { Request as Req, Response as Res } from "express";
+import { Body, Controller, Get, Param, Post, Put, Response, UseGuards } from "@nestjs/common";
+import { Response as Res } from "express";
 import { JwtAuthGuard } from "src/guard/jwt.guard";
+import { User } from "./user.decorator";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -9,8 +10,8 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    getOwnDetails(@Request() req: Req, @Response() res: Res) {
-        return res.json({ data: req.user });
+    getOwnDetails(@User() user: object, @Response() res: Res) {
+        return res.json({ data: user });
     }
 
     // TODO: ensure user has at least user privileges
