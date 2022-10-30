@@ -30,7 +30,7 @@ export class UserController {
 
     // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
-    @Get("fetch-users-list/:organizationId")
+    @Get("fetch/users-list")
     async fetchUsersListByOrganization(@Organization() organizationId: string) {
         return await this.userService.fetchUsersByOrg(organizationId);
     }
