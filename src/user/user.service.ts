@@ -11,7 +11,11 @@ const ORGANIZATION_PREFIX = "organization";
 export class UserService {
     private BASE_URL;
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
-        this.BASE_URL = configService.get("BASE_USER_URL");
+        // this.BASE_URL = configService.get("BASE_USER_URL");
+        this.BASE_URL =
+            process.env.NODE_ENV === "production"
+                ? configService.get("PROD_USER_URL")
+                : configService.get("BASE_USER_URL");
     }
 
     async getDetailsFromEmail(email: string) {
