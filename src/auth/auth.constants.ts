@@ -8,4 +8,5 @@ export const AUTH_ENDPOINTS = {
     USER_SIGNUP_STATUS: "user-signup-status",
     GENERATE_JWT: "generate-jwt-token",
     VALIDATE_JWT: "validate-jwt-token",
+    VALIDATE_LOGIN_METHOD: "validate-login-method",
 };

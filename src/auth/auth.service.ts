@@ -140,7 +140,7 @@ export class AuthService {
         };
 
         try {
-            await this.httpService.axiosRef.post(`${this.BASE_AUTH_URL}/validate-login-method`, data);
+            await this.httpService.axiosRef.post(`${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.VALIDATE_LOGIN_METHOD}`, data);
             return true;
         } catch (error) {
             errorHandler(error);
