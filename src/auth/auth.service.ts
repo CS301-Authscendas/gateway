@@ -1,14 +1,18 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { errorHandler } from "./auth.util";
 
 @Injectable()
 export class AuthService {
-    private BASE_AUTH_URL;
+    private BASE_AUTH_URL: string;
+    private readonly logger = new Logger(AuthService.name);
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_AUTH_URL = configService.get("BASE_AUTH_URL") + "/auth";
+
+        // TODO: Remove before production deployment.
+        this.logger.log(this.BASE_AUTH_URL);
     }
 
     async signup(requestBody: object) {
@@ -131,5 +135,20 @@ export class AuthService {
         } catch (error) {
             errorHandler(error);
         }
+    }
+
+    async checkUserLoginMethod(orgId: string, loginMethod: string): Promise<boolean> {
+        const data = {
+            organizationId: orgId,
+            loginMethod: loginMethod,
+        };
+
+        try {
+            await this.httpService.axiosRef.post(`${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.VALIDATE_LOGIN_METHOD}`, data);
+            return true;
+        } catch (error) {
+            errorHandler(error);
+        }
+        return false;
     }
 }
