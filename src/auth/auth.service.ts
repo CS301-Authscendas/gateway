@@ -8,6 +8,7 @@ import { errorHandler } from "./auth.util";
 export class AuthService {
     private BASE_AUTH_URL: string;
     private logger: Logger = new Logger(AuthService.name);
+
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_AUTH_URL =
             configService.get("NODE_ENV") === "production"
