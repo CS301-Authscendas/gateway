@@ -1,7 +1,9 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { UserResponse } from "../user/user.dto";
 import { AUTH_ENDPOINTS } from "./auth.constants";
+import { GenericAuthResponse, JwtResponse } from "./auth.dto";
 import { errorHandler } from "./auth.util";
 
 @Injectable()
@@ -21,7 +23,7 @@ export class AuthService {
 
     async signup(requestBody: object) {
         try {
-            const resp = await this.httpService.axiosRef.post(
+            const resp = await this.httpService.axiosRef.post<GenericAuthResponse>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.SIGNUP}`,
                 requestBody,
             );
@@ -33,7 +35,7 @@ export class AuthService {
 
     async login(requestBody: object) {
         try {
-            const resp = await this.httpService.axiosRef.post(
+            const resp = await this.httpService.axiosRef.post<GenericAuthResponse>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.LOGIN}`,
                 requestBody,
             );
@@ -45,7 +47,7 @@ export class AuthService {
 
     async generate2FAToken(email: string) {
         try {
-            const resp = await this.httpService.axiosRef.get(
+            const resp = await this.httpService.axiosRef.get<GenericAuthResponse>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.GENERATE_2FA}/${email}`,
             );
             return resp?.data;
@@ -56,7 +58,7 @@ export class AuthService {
 
     async validate2FAToken(requestBody: object) {
         try {
-            const resp = await this.httpService.axiosRef.post(
+            const resp = await this.httpService.axiosRef.post<UserResponse>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.VALIDATE_2FA}`,
                 requestBody,
             );
@@ -68,7 +70,7 @@ export class AuthService {
 
     async generateJwtToken(email: string) {
         try {
-            const resp = await this.httpService.axiosRef.get(
+            const resp = await this.httpService.axiosRef.get<JwtResponse>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.GENERATE_JWT}/${email}`,
             );
             return resp?.data;
@@ -132,7 +134,7 @@ export class AuthService {
 
     async userSignUpStatus(id: string) {
         try {
-            const resp = await this.httpService.axiosRef.get(
+            const resp = await this.httpService.axiosRef.get<string>(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/${id}`,
             );
             return resp?.data;
