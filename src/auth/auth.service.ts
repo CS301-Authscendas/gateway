@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AUTH_ENDPOINTS } from "./auth.constants";
 import { errorHandler } from "./auth.util";
@@ -7,8 +7,15 @@ import { errorHandler } from "./auth.util";
 @Injectable()
 export class AuthService {
     private BASE_AUTH_URL: string;
+    private logger: Logger = new Logger(AuthService.name);
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
-        this.BASE_AUTH_URL = configService.get("BASE_AUTH_URL") + "/auth";
+        this.BASE_AUTH_URL =
+            configService.get("NODE_ENV") === "production"
+                ? configService.get("PRODUCTION_ORGANIZATION_URL") ?? ""
+                : configService.get("BASE_AUTH_URL") ?? "";
+
+        this.BASE_AUTH_URL += "/auth";
+        this.logger.log(this.BASE_AUTH_URL);
     }
 
     async signup(requestBody: object) {

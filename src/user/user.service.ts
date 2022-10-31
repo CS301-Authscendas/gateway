@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { USER_ENDPOINTS } from "./user.constants";
 import { errorHandler } from "./user.util";
@@ -10,12 +10,16 @@ const ORGANIZATION_PREFIX = "organization";
 @Injectable()
 export class UserService {
     private BASE_USER_URL: string;
+    private logger: Logger = new Logger(UserService.name);
 
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_USER_URL =
-            process.env.NODE_ENV === "production"
-                ? configService.get("PROD_USER_URL")
-                : configService.get("BASE_USER_URL");
+            configService.get("NODE_ENV") === "production"
+                ? configService.get("PRODUCTION_ORGANIZATION_URL") ?? ""
+                : configService.get("BASE_ORGANIZATION_URL") ?? "";
+
+        this.BASE_USER_URL += "/organization";
+        this.logger.log(this.BASE_USER_URL);
     }
 
     async getDetailsFromEmail(email: string) {
