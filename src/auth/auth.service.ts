@@ -12,7 +12,7 @@ export class AuthService {
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
         this.BASE_AUTH_URL =
             configService.get("NODE_ENV") === "production"
-                ? configService.get("PRODUCTION_ORGANIZATION_URL") ?? ""
+                ? configService.get("PRODUCTION_AUTH_URL") ?? ""
                 : configService.get("BASE_AUTH_URL") ?? "";
 
         this.BASE_AUTH_URL += "/auth";

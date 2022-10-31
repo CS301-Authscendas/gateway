@@ -19,7 +19,7 @@ export class AppController {
     @Get("/auth/healthcheck")
     async authHealthCheck(): Promise<string> {
         const AUTH_URL = this.isProdEnvironment
-            ? this.configService.get("PRODUCTION_ORGANIZATION_URL")
+            ? this.configService.get("PRODUCTION_AUTH_URL")
             : this.configService.get("BASE_AUTH_URL");
 
         this.logger.log("Auth url --- " + AUTH_URL);
