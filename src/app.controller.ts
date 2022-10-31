@@ -1,11 +1,15 @@
+import { HttpService } from "@nestjs/axios";
 import { Controller, Get, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 @Controller()
 export class AppController {
     private readonly logger = new Logger(AppController.name);
+    private readonly isProdEnvironment: boolean;
 
-    constructor(private readonly configService: ConfigService) {}
+    constructor(private readonly configService: ConfigService, private readonly httpService: HttpService) {
+        this.isProdEnvironment = process.env.NODE_ENV === "production";
+    }
 
     @Get("/healthcheck")
     healthCheck(): string {
@@ -13,23 +17,24 @@ export class AppController {
     }
 
     @Get("/auth/healthcheck")
-    authHealthCheck(): string {
-        const BASE_AUTH_URL = this.configService.get("BASE_AUTH_URL") + "/auth";
+    async authHealthCheck(): Promise<string> {
+        const AUTH_URL = this.isProdEnvironment
+            ? this.configService.get("PRODUCTION_ORGANIZATION_URL")
+            : this.configService.get("BASE_AUTH_URL");
 
-        // TODO: Remove before production deployment.
-        this.logger.log("Auth url --- " + BASE_AUTH_URL);
-        return "Auth service is awake!";
+        this.logger.log("Auth url --- " + AUTH_URL);
+        const response = await this.httpService.axiosRef.get(`${AUTH_URL}/healthcheck`);
+        return response.data;
     }
 
     @Get("/organizations/healthcheck")
-    orgHealthCheck(): string {
-        const BASE_USER_URL =
-            process.env.NODE_ENV === "production"
-                ? this.configService.get("PROD_USER_URL")
-                : this.configService.get("BASE_USER_URL");
+    async orgHealthCheck(): Promise<string> {
+        const ORG_URL = this.isProdEnvironment
+            ? this.configService.get("PRODUCTION_ORGANIZATION_URL")
+            : this.configService.get("BASE_ORGANIZATION_URL");
 
-        // TODO: Remove before production deployment.
-        this.logger.log("Org url --- " + BASE_USER_URL);
-        return "Org service is awake!";
+        this.logger.log("Org url --- " + ORG_URL);
+        const response = await this.httpService.axiosRef.get(`${ORG_URL}/healthcheck`);
+        return response.data;
     }
 }
