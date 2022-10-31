@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { USER_ENDPOINTS } from "./user.constants";
 import { errorHandler } from "./user.util";
@@ -10,17 +10,12 @@ const ORGANIZATION_PREFIX = "organization";
 @Injectable()
 export class UserService {
     private BASE_USER_URL: string;
-    private readonly logger = new Logger(UserService.name);
 
     constructor(private readonly httpService: HttpService, configService: ConfigService) {
-        // this.BASE_URL = configService.get("BASE_USER_URL");
         this.BASE_USER_URL =
             process.env.NODE_ENV === "production"
                 ? configService.get("PROD_USER_URL")
                 : configService.get("BASE_USER_URL");
-
-        // TODO: Remove before production deployment.
-        this.logger.log(this.BASE_USER_URL);
     }
 
     async getDetailsFromEmail(email: string) {
