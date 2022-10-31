@@ -2,6 +2,7 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { USER_ENDPOINTS } from "./user.constants";
+import { OrganizationResponse, UserResponse } from "./user.dto";
 import { errorHandler } from "./user.util";
 
 const USER_PREFIX = "user";
@@ -24,7 +25,9 @@ export class UserService {
 
     async getDetailsFromEmail(email: string) {
         try {
-            const resp = await this.httpService.axiosRef.get(`${this.BASE_USER_URL}/${USER_PREFIX}/${email}`);
+            const resp = await this.httpService.axiosRef.get<UserResponse>(
+                `${this.BASE_USER_URL}/${USER_PREFIX}/${email}`,
+            );
             return resp?.data;
         } catch (error) {
             errorHandler(error);
@@ -33,7 +36,7 @@ export class UserService {
 
     async fetchUsersByOrg(organizationId: string) {
         try {
-            const resp = await this.httpService.axiosRef.get(
+            const resp = await this.httpService.axiosRef.get<UserResponse[]>(
                 `${this.BASE_USER_URL}/${USER_PREFIX}/${USER_ENDPOINTS.GET_USERS_FROM_ORG}/${organizationId}`,
             );
             return resp?.data;
@@ -44,7 +47,10 @@ export class UserService {
 
     async updateUserDetails(requestBody: object) {
         try {
-            const resp = await this.httpService.axiosRef.put(`${this.BASE_USER_URL}/${USER_PREFIX}`, requestBody);
+            const resp = await this.httpService.axiosRef.put<boolean>(
+                `${this.BASE_USER_URL}/${USER_PREFIX}`,
+                requestBody,
+            );
             return resp?.data;
         } catch (error) {
             errorHandler(error);
@@ -62,7 +68,7 @@ export class UserService {
 
     async fetchOrganizationsByList(requestBody: object) {
         try {
-            const resp = await this.httpService.axiosRef.post(
+            const resp = await this.httpService.axiosRef.post<OrganizationResponse[]>(
                 `${this.BASE_USER_URL}/${ORGANIZATION_PREFIX}/${USER_ENDPOINTS.FETCH_ORGANIZATIONS}`,
                 requestBody,
             );
