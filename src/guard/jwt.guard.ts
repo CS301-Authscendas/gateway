@@ -11,11 +11,16 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const authHeader: string = request.header("Authorization");
+        const loginMethod: string = request.header("login-method");
+        if (!loginMethod) {
+            throw new BadRequestException("Login method is unspecified!");
+        }
+
         if (!authHeader) {
             throw new BadRequestException("JWT token is missing.");
         }
 
-        request.user = await this.authService.validateJwtToken(authHeader);
+        request.user = await this.authService.validateJwtToken(authHeader, loginMethod);
         return true;
     }
 }

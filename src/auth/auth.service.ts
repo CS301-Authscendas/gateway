@@ -79,9 +79,10 @@ export class AuthService {
         }
     }
 
-    async validateJwtToken(token: string) {
+    async validateJwtToken(token: string, loginMethod: string) {
         const data = {
             token: token,
+            loginMethod: loginMethod,
         };
 
         try {
