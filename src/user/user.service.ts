@@ -19,7 +19,6 @@ export class UserService {
                 ? configService.get("PRODUCTION_ORGANIZATION_URL") ?? ""
                 : configService.get("BASE_ORGANIZATION_URL") ?? "";
 
-        this.BASE_USER_URL += "/organization";
         this.logger.log(this.BASE_USER_URL);
     }
 
