@@ -30,7 +30,7 @@ export class UserService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -41,7 +41,7 @@ export class UserService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -53,7 +53,7 @@ export class UserService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -62,7 +62,7 @@ export class UserService {
             const resp = await this.httpService.axiosRef.delete(`${this.BASE_USER_URL}/${USER_PREFIX}/${email}`);
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -74,7 +74,7 @@ export class UserService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 }

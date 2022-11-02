@@ -29,7 +29,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -41,7 +41,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -52,7 +52,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -64,7 +64,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -75,7 +75,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -91,7 +91,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -108,7 +108,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -117,7 +117,7 @@ export class AuthService {
             const resp = await this.httpService.axiosRef.get(`${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.SSO_LOGIN}`);
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -128,7 +128,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -139,7 +139,7 @@ export class AuthService {
             );
             return resp?.data;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
     }
 
@@ -153,7 +153,7 @@ export class AuthService {
             await this.httpService.axiosRef.post(`${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.VALIDATE_LOGIN_METHOD}`, data);
             return true;
         } catch (error) {
-            errorHandler(error);
+            errorHandler(this.logger, error);
         }
         return false;
     }
