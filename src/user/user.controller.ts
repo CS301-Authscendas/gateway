@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Response, UseGuards } 
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { Response as Res } from "express";
 import { JwtAuthGuard } from "../guard/jwt.guard";
-import { PermissionGuard } from "../guard/permissions.guard";
+import { Permission, PermissionGuard } from "../guard/permissions.guard";
 import { Organization } from "../utils/decorators/organization.decorator";
 import { RequirePermissions } from "../utils/decorators/permissions.decorator";
 import { User } from "../utils/decorators/user.decorator";
@@ -40,7 +40,7 @@ export class UserController {
     // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch/users-list")
-    @RequirePermissions("admin-view")
+    @RequirePermissions(Permission.AdminRead)
     @ApiBody({ type: [UserResponse] })
     async fetchUsersListByOrganization(@Organization() organizationId: string): Promise<UserResponse[]> {
         return await this.userService.fetchUsersByOrg(organizationId);
@@ -49,14 +49,14 @@ export class UserController {
     // TODO: ensure user has at least admin:edit privileges
     // Endpoint to edit user information
     @Put("edit-user-details")
-    @RequirePermissions("admin-edit")
+    @RequirePermissions(Permission.AdminEdit)
     @ApiBody({ type: Boolean })
     async editUserDetails(@Body() requestBody: object): Promise<boolean> {
         return await this.userService.updateUserDetails(requestBody);
     }
 
     @Delete(":email")
-    @RequirePermissions("admin-delete")
+    @RequirePermissions(Permission.AdminDelete)
     async deleteUser(@Param("email") email: string): Promise<void> {
         await this.userService.deleteUser(email);
     }

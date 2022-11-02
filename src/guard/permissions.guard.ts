@@ -3,6 +3,13 @@ import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { PERMISSIONS_KEY } from "../utils/decorators/permissions.decorator";
 
+export enum Permission {
+    User = "user",
+    AdminRead = "admin-read",
+    AdminEdit = "admin-edit",
+    AdminDelete = "admin-delete",
+}
+
 @Injectable()
 export class PermissionGuard implements CanActivate {
     constructor(private reflector: Reflector) {}
