@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Response, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Response, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response as Res } from "express";
 import { JwtAuthGuard } from "../guard/jwt.guard";
@@ -57,15 +57,15 @@ export class AuthController {
 
     @Get(AUTH_ENDPOINTS.SSO_LOGIN)
     @ApiResponse({ status: 403 })
-    async ssoLogin() {
-        return await this.authService.ssoLogin();
+    async ssoLogin(@Response() res: Res) {
+        return res.redirect(await this.authService.ssoLogin());
     }
 
-    @Get(`${AUTH_ENDPOINTS.SSO_CALLBACK}/:code`)
+    @Get(`${AUTH_ENDPOINTS.SSO_CALLBACK}`)
     @ApiResponse({ status: 403 })
     @ApiResponse({ status: 401, description: "Consent was not provided to web application." })
-    async ssoCallback(@Param("code") code: string): Promise<void> {
-        return await this.authService.ssoCallback(code);
+    async ssoCallback(@Query("code") authCode: string): Promise<void> {
+        return await this.authService.ssoCallback(authCode);
     }
 
     @Get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/:id`)
