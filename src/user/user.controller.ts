@@ -22,7 +22,6 @@ export class UserController {
         return res.json({ data: user });
     }
 
-    // TODO: ensure user has at least user privileges
     @Get(":email")
     @ApiBody({ type: UserResponse })
     async getDetailsFromEmail(@Param("email") email: string): Promise<UserResponse> {
@@ -37,7 +36,6 @@ export class UserController {
         return await this.userService.fetchOrganizationsByList(requestBody);
     }
 
-    // TODO: ensure user has owner or admin privileges
     // Endpoint to render list of users on the home screen
     @Get("fetch/users-list")
     @RequirePermissions(Permission.AdminRead)
@@ -46,7 +44,6 @@ export class UserController {
         return await this.userService.fetchUsersByOrg(organizationId);
     }
 
-    // TODO: ensure user has at least admin:edit privileges
     // Endpoint to edit user information
     @Put("edit-user-details")
     @RequirePermissions(Permission.AdminWrite)
