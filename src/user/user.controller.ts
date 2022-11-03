@@ -52,6 +52,12 @@ export class UserController {
         return await this.userService.updateUserDetails(requestBody);
     }
 
+    @Delete("myself")
+    async deleteMyself(@User() user: object) {
+        const email = (user as any)?.userDetails?.email;
+        await this.userService.deleteUser(email);
+    }
+
     @Delete(":email")
     @RequirePermissions(Permission.AdminDelete)
     async deleteUser(@Param("email") email: string): Promise<void> {
