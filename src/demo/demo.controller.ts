@@ -5,8 +5,13 @@ import { DemoService } from "./demo.service";
 export class DemoController {
     constructor(private readonly demoService: DemoService) {}
 
-    @Post()
+    @Post("trigger-email")
     async triggerEmail() {
         return this.demoService.triggerEmail();
+    }
+
+    @Post("trigger-seed")
+    async triggerUserSeeding() {
+        return this.demoService.triggerUserSeeding();
     }
 }

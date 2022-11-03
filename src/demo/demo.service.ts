@@ -27,4 +27,12 @@ export class DemoService {
             Logger.log(error);
         }
     }
+
+    async triggerUserSeeding() {
+        try {
+            await this.httpService.axiosRef.get(`${this.BASE_USER_URL}/s3/test-sync-all-org`);
+        } catch (error) {
+            Logger.log(error);
+        }
+    }
 }
