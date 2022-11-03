@@ -75,4 +75,12 @@ export class AuthController {
     async userSignUpStatus(@Param("id") id: string): Promise<string> {
         return await this.authService.userSignUpStatus(id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(`${AUTH_ENDPOINTS.VALIDATE_LOGIN_METHOD}`)
+    @ApiBody({ type: Boolean })
+    @ApiResponse({ status: 200 })
+    async checkUserLoginMethod(): Promise<boolean> {
+        return true;
+    }
 }
