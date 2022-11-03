@@ -6,7 +6,7 @@ import { PERMISSIONS_KEY } from "../utils/decorators/permissions.decorator";
 export enum Permission {
     User = "user",
     AdminRead = "admin-read",
-    AdminEdit = "admin-edit",
+    AdminWrite = "admin-write",
     AdminDelete = "admin-delete",
 }
 

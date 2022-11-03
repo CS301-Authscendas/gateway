@@ -49,7 +49,7 @@ export class UserController {
     // TODO: ensure user has at least admin:edit privileges
     // Endpoint to edit user information
     @Put("edit-user-details")
-    @RequirePermissions(Permission.AdminEdit)
+    @RequirePermissions(Permission.AdminWrite)
     @ApiBody({ type: Boolean })
     async editUserDetails(@Body() requestBody: object): Promise<boolean> {
         return await this.userService.updateUserDetails(requestBody);
