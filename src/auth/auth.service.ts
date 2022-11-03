@@ -127,7 +127,7 @@ export class AuthService {
             const resp = await this.httpService.axiosRef.get(
                 `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.SSO_CALLBACK}?code=${code}`,
             );
-            return resp?.data;
+            return resp?.data?.redirectUrl;
         } catch (error) {
             errorHandler(this.logger, error);
         }

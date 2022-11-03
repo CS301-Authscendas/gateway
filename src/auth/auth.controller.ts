@@ -64,8 +64,8 @@ export class AuthController {
     @Get(`${AUTH_ENDPOINTS.SSO_CALLBACK}`)
     @ApiResponse({ status: 403 })
     @ApiResponse({ status: 401, description: "Consent was not provided to web application." })
-    async ssoCallback(@Query("code") authCode: string): Promise<void> {
-        return await this.authService.ssoCallback(authCode);
+    async ssoCallback(@Query("code") authCode: string, @Response() res: Res) {
+        return res.redirect(await this.authService.ssoCallback(authCode));
     }
 
     @Get(`${AUTH_ENDPOINTS.USER_SIGNUP_STATUS}/:id`)
