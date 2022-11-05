@@ -158,4 +158,27 @@ export class AuthService {
         }
         return false;
     }
+
+    async auth0Login(requestBody: object) {
+        try {
+            const resp = await this.httpService.axiosRef.post(
+                `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.AUTH0_LOGIN}`,
+                requestBody,
+            );
+            return resp?.data;
+        } catch (error) {
+            errorHandler(this.logger, error);
+        }
+    }
+
+    async getAuth0JwksKey(keyId: string) {
+        try {
+            const resp = await this.httpService.axiosRef.get(
+                `${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.AUTH0_JWKS_PUBKEY}/${keyId}`,
+            );
+            return resp?.data;
+        } catch (error) {
+            errorHandler(this.logger, error);
+        }
+    }
 }

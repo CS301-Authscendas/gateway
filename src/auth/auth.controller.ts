@@ -83,4 +83,19 @@ export class AuthController {
     async checkUserLoginMethod(): Promise<boolean> {
         return true;
     }
+
+    @Post(AUTH_ENDPOINTS.AUTH0_LOGIN)
+    @ApiBody({ type: String })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403 })
+    async auth0Login(@Body() requestBody: object): Promise<JwtResponse> {
+        return await this.authService.auth0Login(requestBody);
+    }
+
+    @Get(`${AUTH_ENDPOINTS.AUTH0_JWKS_PUBKEY}/:keyId`)
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403 })
+    async auth0GetJwksPubkey(@Param("keyId") keyId: string): Promise<object> {
+        return await this.authService.getAuth0JwksKey(keyId);
+    }
 }
