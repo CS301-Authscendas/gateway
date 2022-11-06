@@ -20,9 +20,9 @@ export class UserModule implements NestModule {
         consumer
             .apply(LoginMethodMiddleware)
             .exclude(
-                { path: "api/user", method: RequestMethod.GET },
-                { path: "api/user/:email", method: RequestMethod.GET },
-                { path: "api/user/fetch-organizations", method: RequestMethod.POST },
+                { path: "v1/user", method: RequestMethod.GET },
+                { path: "v1/user/:email", method: RequestMethod.GET },
+                { path: "v1/user/fetch-organizations", method: RequestMethod.POST },
             )
             .forRoutes(UserController);
     }
