@@ -8,11 +8,11 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
     app.enableCors();
-    app.setGlobalPrefix("/api");
+    app.setGlobalPrefix("/v1");
 
     const config = new DocumentBuilder().setTitle("Authcendas API").setVersion("1.0").addBearerAuth().build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup("api/docs", app, document);
+    SwaggerModule.setup("v1/docs", app, document);
 
     const port = configService.get("PORT");
     Logger.log("Starting service on PORT --- " + port);
