@@ -8,6 +8,7 @@ export const AUTH_ENDPOINTS = {
     USER_SIGNUP_STATUS: "user-signup-status",
     GENERATE_JWT: "generate-jwt-token",
     VALIDATE_JWT: "validate-jwt-token",
+    REFRESH_JWT: "refresh-jwt-token",
     VALIDATE_LOGIN_METHOD: "validate-login-method",
     AUTH0_LOGIN: "auth0/login",
     AUTH0_JWKS_PUBKEY: "get-jwks-pubkey",

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Response, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Param, Post, Query, Response, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response as Res } from "express";
 import { JwtAuthGuard } from "../guard/jwt.guard";
@@ -43,6 +43,12 @@ export class AuthController {
     @ApiBody({ type: JwtResponse })
     async generateJWTToken(@Param("email") email: string): Promise<JwtResponse> {
         return await this.authService.generateJwtToken(email);
+    }
+
+    @Get(AUTH_ENDPOINTS.REFRESH_JWT)
+    @ApiBody({ type: JwtResponse })
+    async refreshJWTToken(@Headers("Authorization") token: string): Promise<JwtResponse> {
+        return await this.authService.refreshJwtToken(token);
     }
 
     @UseGuards(JwtAuthGuard)

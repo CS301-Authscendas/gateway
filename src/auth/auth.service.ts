@@ -96,6 +96,17 @@ export class AuthService {
         }
     }
 
+    async refreshJwtToken(token: string) {
+        try {
+            const resp = await this.httpService.axiosRef.get(`${this.BASE_AUTH_URL}/${AUTH_ENDPOINTS.REFRESH_JWT}`, {
+                headers: { Authorization: token },
+            });
+            return resp?.data;
+        } catch (error) {
+            errorHandler(this.logger, error);
+        }
+    }
+
     async validateUserCredentials(email: string, password: string) {
         const data = {
             email: email,
